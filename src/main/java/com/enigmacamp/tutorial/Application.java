@@ -1,18 +1,15 @@
 package com.enigmacamp.tutorial;
 
-import com.enigmacamp.tutorial.repository.DynamicQuery;
+import com.enigmacamp.tutorial.exception.DataNotFoundException;
 import com.enigmacamp.tutorial.repository.model.Trainee;
-import com.enigmacamp.tutorial.usecase.FindTrainee;
-import com.enigmacamp.tutorial.usecase.GetTotalTrainee;
-import com.enigmacamp.tutorial.usecase.RegisterTrainee;
+import com.enigmacamp.tutorial.repository.model.TraineeCountResult;
+import com.enigmacamp.tutorial.usecase.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +25,12 @@ public class Application implements CommandLineRunner {
     @Autowired
     private GetTotalTrainee getTotalTrainee;
 
+    @Autowired
+    private ActivateTrainee activateTrainee;
+
+    @Autowired
+    private GetCountTrainee getCountTrainee;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -41,8 +44,8 @@ public class Application implements CommandLineRunner {
 
 //            Bulk Insert
 //            List<Trainee> registeredUser = registerTrainee.call(List.of(
-//                    new Trainee("Budi", "Anduk", 29, new Date(), 0),
-//                    new Trainee("David", "Budiman", 31, new Date(), 0)
+//                    new Trainee("Kenji", "", 24, new Date(), 0),
+//                    new Trainee("Kenneth", "Parulian", 25, new Date(), 0)
 //            ));
 //            System.out.println(registeredUser.size());
 
@@ -61,12 +64,24 @@ public class Application implements CommandLineRunner {
 //                System.out.println(trainee.getId() + " " + trainee.getFirstName() + " " + trainee.getLastName());
 //            }
 
-            DynamicQuery dynamicQuery = new DynamicQuery();
-            dynamicQuery.setLastNameStartWith("a");
-            DynamicSort dynamicSort = new DynamicSort("age", Sort.Direction.ASC);
-            List<Trainee> trainees = findTrainee.call(dynamicQuery, dynamicSort);
-            for (Trainee trainee : trainees) {
-                System.out.println(trainee.getId() + " " + trainee.getFirstName() + " " + trainee.getLastName() + " " + trainee.getAge());
+//            Update status trainee
+//            try {
+//                Trainee trainee = activateTrainee.call("6215871591d40f79b60e0a4c");
+//                System.out.println(trainee.toString());
+//            } catch (DataNotFoundException e) {
+//                System.out.println("Trainee not found");
+//            }
+
+//            DynamicQuery dynamicQuery = new DynamicQuery();
+//            dynamicQuery.setLastNameStartWith("a");
+//            DynamicSort dynamicSort = new DynamicSort("age", Sort.Direction.ASC);
+//            List<Trainee> trainees = findTrainee.call(dynamicQuery, dynamicSort);
+//            for (Trainee trainee : trainees) {
+//                System.out.println(trainee.getId() + " " + trainee.getFirstName() + " " + trainee.getLastName() + " " + trainee.getAge());
+//            }
+            List<TraineeCountResult> countResultList = getCountTrainee.call("age");
+            for (TraineeCountResult c : countResultList) {
+                System.out.println(c.toString());
             }
         } catch (Exception e) {
             System.out.println("Failed " + e);

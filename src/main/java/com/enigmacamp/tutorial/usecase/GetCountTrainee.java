@@ -11,19 +11,16 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class FindTrainee {
+public class GetCountTrainee {
     private TraineeRepository traineeRepository;
 
     @Autowired
-    public FindTrainee(TraineeRepository traineeRepository) {
+    public GetCountTrainee(TraineeRepository traineeRepository) {
         this.traineeRepository = traineeRepository;
     }
 
-    public Trainee call(String id) {
-        return traineeRepository.findById(id).orElse(null);
-    }
 
-    public List<Trainee> call(DynamicQuery dynamicQuery) throws MandatoryParameterException {
-        return traineeRepository.query(dynamicQuery, null);
+    public List<TraineeCountResult> call(String groupBy) {
+        return traineeRepository.queryCountGroup(groupBy);
     }
 }

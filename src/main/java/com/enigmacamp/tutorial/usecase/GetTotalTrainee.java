@@ -19,4 +19,8 @@ public class GetTotalTrainee {
     public long call() {
         return traineeRepository.count();
     }
+
+    public void call(String groupBy) {
+
+    }
 }
